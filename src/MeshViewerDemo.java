@@ -28,10 +28,21 @@ import javafx.stage.Stage;
  */
 public class MeshViewerDemo  extends Application {
 
-    public double scale = 100;
+    double scale = 100;
+    MeshView meshView;
 
-    public MeshView meshView;
     PointLight pointLight;
+
+    boolean pointLightSwitch = true;
+
+        // color of lights
+    Color farbeAmbientLightOn = new Color(1, 1, 1, 1);
+    Color farbeAmbientLightOff = new Color(0, 0, 0, 0);
+
+
+    Color farbepointLightOn = Color.CRIMSON;
+    Color farbepointLightOff = Color.BLACK;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -53,19 +64,15 @@ public class MeshViewerDemo  extends Application {
 
         // setup lights
 
-        // color of lights
-        Color farbe1 = new Color(1, 1, 1, 1);
-        Color farbe2 = Color.CRIMSON;
-
         // PointLight
-        pointLight = new PointLight(farbe2);
+        pointLight = new PointLight(farbepointLightOn);
         pointLight.setTranslateX(100);
         pointLight.setTranslateY(100);
         pointLight.setTranslateZ(100);
         pointLight.setRotate(90);
 
         // AmbientLight
-        AmbientLight ambient = new AmbientLight(farbe1);
+        AmbientLight ambient = new AmbientLight(farbeAmbientLightOn);
 
         // add lights to viewer
         world.getChildren().add(ambient);
@@ -149,13 +156,19 @@ public class MeshViewerDemo  extends Application {
             }
         });
 
-        // MenuItem PointLight Off
-        MenuItem item3 = new MenuItem("PointLight Off");
+        // MenuItem PointLight On or Off
+        MenuItem item3 = new MenuItem("PointLight On / Off");
         item3.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent event) {
-                pointLight.setColor(Color.BLACK);
+
+                if (pointLightSwitch) {
+                    pointLight.setColor(farbepointLightOff);
+                    pointLightSwitch = false;
+                } else {
+                    pointLight.setColor(farbepointLightOn);
+                    pointLightSwitch = true;
+                }
             }
         });
 

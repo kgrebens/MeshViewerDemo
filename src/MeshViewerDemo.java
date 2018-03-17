@@ -28,22 +28,24 @@ import javafx.stage.Stage;
  */
 public class MeshViewerDemo  extends Application {
 
-    double scale = 100;
-    MeshView meshView;
+    private double scale = 100;
+    private MeshView meshView;
 
-    PointLight pointLight;
+    private PointLight pointLight;
 
-    boolean pointLightSwitch = true;
+    private boolean pointLightSwitch = true;
 
-        // color of lights
-    Color farbeAmbientLightOn = new Color(1, 1, 1, 1);
-    Color farbeAmbientLightOff = new Color(0, 0, 0, 0);
+    // color of lights
+    private final Color farbeAmbientLightOn = new Color(1, 1, 1, 1);
+    private final Color farbeAmbientLightOff = new Color(0, 0, 0, 0);
+    private final Color farbepointLightOn = Color.CRIMSON;
+    private final Color farbepointLightOff = Color.BLACK;
 
-
-    Color farbepointLightOn = Color.CRIMSON;
-    Color farbepointLightOff = Color.BLACK;
-
-
+    /**
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -107,7 +109,7 @@ public class MeshViewerDemo  extends Application {
         // load model (fxml) into meshview
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(this.getClass().getResource("resources/Axe_test.fxml"));
-        MeshView meshView = fxmlLoader.<MeshView>load();
+        meshView = fxmlLoader.<MeshView>load();
 
         // set scale of the meshview model
         meshView.setScaleX(scale);
@@ -122,7 +124,7 @@ public class MeshViewerDemo  extends Application {
         world.getChildren().add(meshView);
 
 
-        // change scale via mouse scroll event
+        //  change scale via mouse scroll event
         scene.setOnScroll((ScrollEvent event) -> {
             double deltaY = event.getDeltaY();
             scale = scale + deltaY;
@@ -138,37 +140,22 @@ public class MeshViewerDemo  extends Application {
 
         // MenuItem actived "DrawMode.FILL"
         MenuItem item1 = new MenuItem("DrawMode.FILL");
-        item1.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                meshView.setDrawMode(DrawMode.FILL);
-            }
-        });
+        item1.setOnAction(event -> meshView.setDrawMode(DrawMode.FILL));
 
         // MenuItem actived "DrawMode.LINE"
         MenuItem item2 = new MenuItem("DrawMode.LINE");
-        item2.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                meshView.setDrawMode(DrawMode.LINE);
-            }
-        });
+        item2.setOnAction(event -> meshView.setDrawMode(DrawMode.LINE));
 
         // MenuItem PointLight On or Off
         MenuItem item3 = new MenuItem("PointLight On / Off");
-        item3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        item3.setOnAction(event -> {
 
-                if (pointLightSwitch) {
-                    pointLight.setColor(farbepointLightOff);
-                    pointLightSwitch = false;
-                } else {
-                    pointLight.setColor(farbepointLightOn);
-                    pointLightSwitch = true;
-                }
+            if (pointLightSwitch) {
+                pointLight.setColor(farbepointLightOff);
+                pointLightSwitch = false;
+            } else {
+                pointLight.setColor(farbepointLightOn);
+                pointLightSwitch = true;
             }
         });
 
@@ -177,12 +164,7 @@ public class MeshViewerDemo  extends Application {
 
 
         // show ContextMenu when user right-click on screen
-        scene.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextMenu.show(world, event.getScreenX(), event.getScreenY());
-            }
-        });
+        scene.setOnContextMenuRequested(event -> contextMenu.show(world, event.getScreenX(), event.getScreenY()));
 
     }
 
@@ -190,9 +172,10 @@ public class MeshViewerDemo  extends Application {
     private double mouseDownY;
 
     /**
-     * handle mouse events to navigate in viewer
      *
-     * @param scene
+      * @param scene
+     * @param cameraRotateX
+     * @param cameraRotateY
      * @param cameraTranslate
      */
     private void addMouseHanderToScene(Scene scene, Rotate cameraRotateX, Rotate cameraRotateY, Translate cameraTranslate) {
